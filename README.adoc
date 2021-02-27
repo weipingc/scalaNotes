@@ -1,0 +1,31 @@
+
+
+https://stackoverflow.com/questions/7764197/difference-between-foldleft-and-reduceleft-in-scala
+Few things to mention here, before giving the actual answer:
+
+Your question doesn't have anything to do with left, it's rather about the difference between reducing and folding
+The difference is not the implementation at all, just look at the signatures.
+The question doesn't have anything to do with Scala in particular, it's rather about the two concepts of functional programming.
+Back to your question:
+
+Here is the signature of foldLeft (could also have been foldRight for the point I'm going to make):
+
+def foldLeft [B] (z: B)(f: (B, A) => B): B
+And here is the signature of reduceLeft (again the direction doesn't matter here)
+
+def reduceLeft [B >: A] (f: (B, A) => B): B
+These two look very similar and thus caused the confusion. reduceLeft is a special case of foldLeft (which by the way means that you sometimes can express the same thing by using either of them).
+
+When you call reduceLeft say on a List[Int] it will literally reduce the whole list of integers into a single value, which is going to be of type Int (or a supertype of Int, hence [B >: A]).
+
+When you call foldLeft say on a List[Int] it will fold the whole list (imagine rolling a piece of paper) into a single value, but this value doesn't have to be even related to Int (hence [B]).
+
+Here is an example:
+
+def listWithSum(numbers: List[Int]) = numbers.foldLeft((List.empty[Int], 0)) {
+   (resultingTuple, currentInteger) =>
+      (currentInteger :: resultingTuple._1, currentInteger + resultingTuple._2)
+}
+This method takes a List[Int] and returns a Tuple2[List[Int], Int] or (List[Int], Int). It calculates the sum and returns a tuple with a list of integers and it's sum. By the way the list is returned backwards, because we used foldLeft instead of foldRight.
+
+Watch One Fold to rule them all for a more in depth explanation.
