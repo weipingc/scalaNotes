@@ -1,0 +1,2 @@
+
+https://www.geeksforgeeks.org/scala-null-null-nil-nothing-none-and-unit/[Null, null, Nil, Nothing, None, and Unit]
